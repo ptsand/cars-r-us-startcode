@@ -18,6 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 @DiscriminatorValue("USER")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name = "user")
 public class BaseUser implements UserWithPassword {
 
