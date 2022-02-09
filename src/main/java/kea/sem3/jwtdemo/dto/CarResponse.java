@@ -11,6 +11,8 @@ import lombok.Setter;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -34,6 +36,7 @@ public class CarResponse {
         this.brand = car.getBrand();
         this.model = car.getModel();
         this.pricePrDay = car.getPricePrDay();
+        this.id = car.getId();
         if(includeAll) {
             this.created = car.getCreated();
             this.updated = car.getEdited();
@@ -41,8 +44,8 @@ public class CarResponse {
         }
     }
 
-    //public static List<CarResponse> getCarsFromEntities(List<Car> cars){
-        //We will do this together
-    //}
+    public static List<CarResponse> getCarsFromEntities(List<Car> cars){
+        return cars.stream().map(car -> new CarResponse(car,false)).collect(Collectors.toList());
+    }
 }
 

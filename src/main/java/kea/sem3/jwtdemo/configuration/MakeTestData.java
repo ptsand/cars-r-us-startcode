@@ -50,7 +50,9 @@ public class MakeTestData implements ApplicationRunner {
     }
 
     public void makeCars() {
-        carRepository.save(new Car(CarBrand.FORD,"Fiesta",1000.0,500.0));
+        carRepository.save(new Car(CarBrand.FORD,"Fiesta",1000.0,10.0));
+        carRepository.save(new Car(CarBrand.BMW,"i5",1000.0,50.0));
+        carRepository.save(new Car(CarBrand.SUZUKI,"Alto",1000.0,5.0));
     }
 
     @Override

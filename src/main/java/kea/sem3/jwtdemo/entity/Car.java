@@ -1,5 +1,6 @@
 package kea.sem3.jwtdemo.entity;
 
+import kea.sem3.jwtdemo.dto.CarRequest;
 import lombok.Getter;
 import lombok.Setter;
 import net.bytebuddy.dynamic.loading.InjectionClassLoader;
@@ -39,6 +40,14 @@ public class Car {
         this.pricePrDay = pricePrDay;
         this.bestDiscount = bestDiscount;
     }
+
+    public Car(CarRequest body) {
+        this.brand = body.getBrand();
+        this.model = body.getModel();
+        this.pricePrDay = body.getPricePrDay();
+        this.bestDiscount = body.getBestDiscount();
+    }
+
 
     public Car() {
 
