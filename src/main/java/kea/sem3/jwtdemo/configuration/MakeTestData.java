@@ -50,7 +50,7 @@ public class MakeTestData implements ApplicationRunner {
     }
 
     public void makeCars() {
-        carRepository.save(new Car("Tesla","s3",1000.0));
+        carRepository.save(new Car(CarBrand.FORD,"Fiesta",1000.0,500.0));
     }
 
     @Override
@@ -59,6 +59,7 @@ public class MakeTestData implements ApplicationRunner {
         userRepository.deleteAll();
 
         makePlainUsers();
+        makeCars();
 
 
     }
