@@ -23,6 +23,7 @@ class CarServiceInMemoryTest
 
     @BeforeAll
     static void setup(@Autowired CarRepository carRepository){
+        carRepository.deleteAll();
         carService = new CarService(carRepository);
         car1Id = carRepository.save(new Car(CarBrand.VOLVO, "C40", 560.0,10.0)).getId();
         car2Id = carRepository.save(new Car(CarBrand.WW, "Up", 300.0,10.0)).getId();

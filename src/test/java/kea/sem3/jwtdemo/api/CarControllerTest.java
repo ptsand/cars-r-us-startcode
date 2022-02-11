@@ -39,6 +39,7 @@ class CarControllerTest {
 
     @BeforeEach
     public void setup() {
+        carRepository.deleteAll();
         carFordId = carRepository.save(new Car(CarBrand.FORD, "Focus", 400.0, 10.0)).getId();
         carSuzukiId = carRepository.save(new Car(CarBrand.SUZUKI, "Vitara", 500.0, 14.0)).getId();
     }
