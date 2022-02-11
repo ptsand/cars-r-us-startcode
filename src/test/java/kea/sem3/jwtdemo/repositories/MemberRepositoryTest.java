@@ -24,4 +24,10 @@ class MemberRepositoryTest {
     public void testCount() {
         assertEquals(2, memberRepository.count());
     }
+
+    @Test
+    public void testFindById(){
+        Member m = memberRepository.findById("usern").orElse(null);  //Remember --> Returns an Optional
+        assertEquals("e@mail.test",m.getEmail());
+    }
 }

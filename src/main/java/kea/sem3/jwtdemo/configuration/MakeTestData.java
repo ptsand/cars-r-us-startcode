@@ -2,24 +2,24 @@ package kea.sem3.jwtdemo.configuration;
 
 import kea.sem3.jwtdemo.entity.*;
 import kea.sem3.jwtdemo.repositories.CarRepository;
+import kea.sem3.jwtdemo.repositories.MemberRepository;
 import kea.sem3.jwtdemo.security.UserRepository;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;
 
-import java.time.LocalDate;
-import java.time.Month;
-
 @Controller
 @Profile("!test")
 public class MakeTestData implements ApplicationRunner {
 
     UserRepository userRepository;
+    MemberRepository memberRepository;
     CarRepository carRepository;
 
-    public MakeTestData(UserRepository userRepository, CarRepository carRepository) {
+    public MakeTestData(UserRepository userRepository, MemberRepository memberRepository, CarRepository carRepository) {
         this.userRepository = userRepository;
+        this.memberRepository = memberRepository;
         this.carRepository = carRepository;
     }
 
@@ -37,6 +37,9 @@ public class MakeTestData implements ApplicationRunner {
         userRepository.save(admin);
         userRepository.save(both);
 
+        memberRepository.save(new Member("tusername","e@mail.test","password","firstn","lastn","street","city",2222,false,0));
+        memberRepository.save(new Member("tuserna","ee@mail.test","passw0rd","firstna","lastna","sstreet","ccity",2223,false,0));
+
         System.out.println("########################################################################################");
         System.out.println("########################################################################################");
         System.out.println("#################################### WARNING ! #########################################");
@@ -46,7 +49,6 @@ public class MakeTestData implements ApplicationRunner {
         System.out.println("########################################################################################");
         System.out.println("########################################################################################");
         System.out.println("Created TEST Users");
-
     }
 
     public void makeCars() {
