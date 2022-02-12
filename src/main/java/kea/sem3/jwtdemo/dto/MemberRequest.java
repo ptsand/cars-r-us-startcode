@@ -9,9 +9,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberRequest {
-    String userName;
+    String username;
     String password;
-    String mail;
+    String email;
     boolean enabled;
     String firstName;
     String lastName;

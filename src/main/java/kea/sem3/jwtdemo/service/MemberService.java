@@ -22,16 +22,29 @@ public class MemberService {
         //Member car = memberRepository.findById(id).orElseThrow(()->new Client4xxException("Not found"));
         return null; // new MemberResponse(car, false);
     }
-    public MemberResponse addMember(MemberRequest body){
-        return new MemberResponse(memberRepository.save(new Member(body)),true);
+    public MemberResponse addMember(MemberRequest body, boolean all){
+        return new MemberResponse(memberRepository.save(new Member(body)),all);
     }
-    public MemberResponse editMember(MemberRequest body,int id){
-        return null;
+    public MemberResponse editMember(MemberRequest body, String id){
+        Member m = memberRepository.findById(id).orElseThrow(()->new Client4xxException("Not found"));
+        m.setUsername(body.getUsername());
+        // to prevent unintentionally changing the member's password to a bcrypt hash
+        if (!m.getPassword().equals(body.getPassword())) m.setPassword(body.getPassword());
+        m.setEmail(body.getEmail());
+        m.setEnabled(body.isEnabled());
+        m.setFirstName(body.getFirstName());
+        m.setLastName(body.getLastName());
+        m.setStreet(body.getStreet());
+        m.setCity(body.getCity());
+        m.setZip(body.getZip());
+        m.setApproved(body.isApproved());
+        m.setRanking(body.getRanking());
+        return new MemberResponse(memberRepository.save(m),true);
     }
-    public void deleteMember(int id) {
-        // return null;
+    public void deleteMember(String id) {
+        memberRepository.deleteById(id);
     }
-    public MemberResponse getMember(String username) {
+    public MemberResponse getMember(String username, boolean all) {
         Member member = memberRepository.findById(username).orElseThrow(()->new Client4xxException("Not found"));
         return new MemberResponse(member,false);
     }

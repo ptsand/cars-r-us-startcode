@@ -11,12 +11,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
@@ -25,7 +24,6 @@ class CarServiceMockitoTest {
     @Mock
     CarRepository carRepository;
 
-    @Autowired
     CarService carService;
 
     @BeforeEach
@@ -57,7 +55,7 @@ class CarServiceMockitoTest {
         Car carWithId = new Car(CarBrand.VOLVO,"V70",100.0,100.0);
         carWithId.setId(1000);
         Mockito.when(carRepository.save(any(Car.class))).thenReturn(carWithId);
-        CarResponse res = carService.addCar(new CarRequest(carWithId.getBrand(),carWithId.getModel(),carWithId.getPricePrDay(),10));
+        CarResponse res = carService.addCar(new CarRequest(carWithId.getBrand(),carWithId.getModel(),carWithId.getPricePrDay(),10),false);
         assertEquals(1000,res.getId());
     }
 

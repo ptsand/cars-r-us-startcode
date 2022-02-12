@@ -16,26 +16,31 @@ public class MemberController {
         this.memberService = memberService;
     }
 
+    // Should be accessible for the admin and the user who owns the id
     @GetMapping("/{id}")
     public MemberResponse getMember(@PathVariable String id) throws Exception {
-        return memberService.getMember(id);
+        return memberService.getMember(id,true);
     }
-
+    // Should be accessible for the admin
     @GetMapping
     public List<MemberResponse> getMembers(){
         return memberService.getMembers();
     }
-
+    // Should be accessible for the admin and other users
     @PostMapping
     public MemberResponse addMember(@RequestBody MemberRequest body){
-        return memberService.addMember(body);
+        return memberService.addMember(body, false);
     }
-
+    // Should be accessible for the admin and the user who owns the id
     @PutMapping("/{id}")
-    public MemberResponse editMembers(@RequestBody MemberRequest body, @PathVariable String id){return null;}
-
+    public MemberResponse editMember(@RequestBody MemberRequest body, @PathVariable String id){
+        return memberService.editMember(body,id);
+    }
+    // Should be accessible for the admin and the user who owns the id
     @DeleteMapping("/{id}")
-    public void deleteMember(@PathVariable String id){}
+    public void deleteMember(@PathVariable String id){
+        memberService.deleteMember(id);
+    }
 
 }
 

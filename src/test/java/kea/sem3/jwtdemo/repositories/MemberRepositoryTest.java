@@ -27,7 +27,13 @@ class MemberRepositoryTest {
 
     @Test
     public void testFindById(){
-        Member m = memberRepository.findById("usern").orElse(null);  //Remember --> Returns an Optional
+        Member m = memberRepository.findById("usern").orElse(null);
         assertEquals("e@mail.test",m.getEmail());
+    }
+    @Test
+    public void testEditEmail(){
+        Member editedMember = memberRepository.save(new Member("usern","newE@mail.test","password","blfirstn","lastn","street","city",2222,false,0));
+        Member m = memberRepository.findById("usern").orElse(null);
+        assertEquals(editedMember.getEmail(),m.getEmail());
     }
 }

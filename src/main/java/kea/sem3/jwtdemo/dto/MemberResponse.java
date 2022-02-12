@@ -19,7 +19,7 @@ public class MemberResponse {
 
     String username;
     String password;
-    String mail;
+    String email;
     boolean enabled;
     String firstName;
     String lastName;
@@ -37,7 +37,7 @@ public class MemberResponse {
 
     public MemberResponse(Member member, boolean includeAll) {
         this.username = member.getUsername();
-        this.mail = member.getEmail();
+        this.email = member.getEmail();
         this.enabled = member.isEnabled();
         this.firstName = member.getFirstName();
         this.lastName = member.getLastName();

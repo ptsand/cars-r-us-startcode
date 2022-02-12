@@ -20,10 +20,10 @@ public class CarService {
     }
     public CarResponse getCar(int id, boolean all) throws Exception {
         Car car = carRepository.findById(id).orElseThrow(()->new Client4xxException("Not found"));
-        return new CarResponse(car, false);
+        return new CarResponse(car, all);
     }
-    public CarResponse addCar(CarRequest body){
-        return new CarResponse(carRepository.save(new Car(body)),true);
+    public CarResponse addCar(CarRequest body, boolean all){
+        return new CarResponse(carRepository.save(new Car(body)),all);
     }
     public CarResponse editCar(CarRequest body,int id){
         return null;

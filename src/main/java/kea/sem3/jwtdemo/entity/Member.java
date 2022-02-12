@@ -45,6 +45,13 @@ public class Member extends BaseUser {
     }
 
     public Member(MemberRequest body) {
-
+        super(body.getUsername(), body.getEmail(), body.getPassword());
+        this.firstName = body.getFirstName();
+        this.lastName = body.getLastName();
+        this.street = body.getStreet();
+        this.city = body.getCity();
+        this.zip = body.getZip();
+        this.approved = body.isApproved();
+        this.ranking = body.getRanking();
     }
 }
