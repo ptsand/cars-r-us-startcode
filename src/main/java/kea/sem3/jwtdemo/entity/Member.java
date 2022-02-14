@@ -1,5 +1,6 @@
 package kea.sem3.jwtdemo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import kea.sem3.jwtdemo.dto.MemberRequest;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +9,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter @Setter
@@ -22,6 +26,10 @@ public class Member extends BaseUser {
     int zip;
     boolean approved;
     int ranking;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "member")
+    Set<Reservation> reservations = new HashSet<>();
 
     @CreationTimestamp
     LocalDateTime created;
