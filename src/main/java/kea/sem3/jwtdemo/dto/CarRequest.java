@@ -17,7 +17,7 @@ public class CarRequest {
     @Enumerated(EnumType.STRING)
     private CarBrand brand;
     private String model;
-    private double pricePrDay;
-    private double bestDiscount;
+    private Double pricePrDay;
+    private Double bestDiscount;
 }
 

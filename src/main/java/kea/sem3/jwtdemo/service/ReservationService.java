@@ -26,15 +26,18 @@ public class ReservationService {
     public List<ReservationResponse> getReservations(){
         return reservationRepository.findAll().stream().map(res -> new ReservationResponse(res)).collect(Collectors.toList());
     }
-    public ReservationResponse getReservation(int id) throws Exception {
+    public ReservationResponse getReservation(int id) throws Client4xxException {
         Reservation res = reservationRepository.findById(id).orElseThrow(()->new Client4xxException("Not found"));
         return new ReservationResponse(res);
     }
-    public ReservationResponse makeReservation(ReservationRequest body){
-        // TODO: Throw exception if the car is already reserved at that time
-        return new ReservationResponse(reservationRepository.save(new Reservation(body, carRepository, memberRepository)));
+    public ReservationResponse makeReservation(ReservationRequest body) throws Exception {
+        if(!carRepository.existsById(body.getCar().getId())) throw new Client4xxException("Car not found");
+        if(!memberRepository.existsById(body.getMember().getUsername())) throw new Client4xxException("Member not found");
+        Reservation res = reservationRepository.findReservationByCar_IdAndRentalDate(body.getCar().getId(),body.getRentalDate());
+        if(res != null) throw new Exception("The car is not available at the chosen date");
+        return new ReservationResponse(reservationRepository.save(new Reservation(body)));
     }
-    public ReservationResponse editReservation(ReservationRequest body,int id){
+    public ReservationResponse editReservation(ReservationRequest body, int id){
         return null;
     }
 

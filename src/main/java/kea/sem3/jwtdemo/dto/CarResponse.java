@@ -24,7 +24,7 @@ public class CarResponse {
     @Enumerated(EnumType.STRING)
     CarBrand brand;
     String model;
-    double pricePrDay;
+    Double pricePrDay;
     Double bestDiscount;
     Set<Reservation> reservations;
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss",shape = JsonFormat.Shape.STRING)

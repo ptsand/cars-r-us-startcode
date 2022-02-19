@@ -32,10 +32,19 @@ public class CarController {
     }
 
     @PutMapping("/{id}")
-    public CarResponse editCar(@RequestBody CarRequest body, @PathVariable int id){return null;}
+    public CarResponse editCar(@RequestBody CarRequest body, @PathVariable int id){
+        return carService.editCar(body,id);
+    }
+
+    @PatchMapping("/{id}/{newPrice}")
+    public void editPrice(@PathVariable int id, @PathVariable double newPrice) {
+        carService.editPrice(id, newPrice);
+    }
 
     @DeleteMapping("/{id}")
-    public void deleteCar(@PathVariable int id){}
+    public void deleteCar(@PathVariable int id){
+        carService.deleteCar(id);
+    }
 
 }
 

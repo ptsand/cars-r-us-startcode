@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -24,9 +24,10 @@ class ReservationRepositoryTest {
 
     @BeforeAll
     static void setUp(@Autowired ReservationRepository reservationRepository, @Autowired CarRepository carRepository, @Autowired MemberRepository memberRepository) {
+        reservationRepository.deleteAll();
         testCar = carRepository.save(new Car(CarBrand.FORD,"Fiesta",1000.0,20.0));
         testMember = memberRepository.save(new Member("tuserna","ee@mail.test","passw0rd","firstna","lastna","sstreet","ccity",2223,false,0));
-        id1 = reservationRepository.save(new Reservation(testCar, testMember, LocalDateTime.of(2000,12,31,0,0))).getId();
+        id1 = reservationRepository.save(new Reservation(testCar, testMember, LocalDate.of(2000,12,31))).getId();
     }
 
     @Test

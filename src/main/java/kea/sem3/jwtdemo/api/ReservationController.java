@@ -28,7 +28,7 @@ public class ReservationController {
     }
 
     @PostMapping
-    public ReservationResponse addReservation(@RequestBody ReservationRequest body){
+    public ReservationResponse addReservation(@RequestBody ReservationRequest body) throws Exception {
         return reservationService.makeReservation(body);
     }
 

@@ -20,9 +20,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -31,59 +34,51 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class ReservationControllerTest {
 
-    @Autowired
-    ReservationRepository reservationRepository;
-    @Autowired
-    MemberRepository memberRepository;
-    @Autowired
-    CarRepository carRepository;
-
-    @Autowired
-    MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
+    @Autowired ReservationRepository reservationRepository;
+    @Autowired MemberRepository memberRepository;
+    @Autowired CarRepository carRepository;
+    @Autowired MockMvc mockMvc;
+    @Autowired private ObjectMapper objectMapper;
     private Car testCar;
     private Member testMember;
-    private Reservation reservation;
+    private List<Reservation> reservation = new ArrayList<>();
+    private LocalDate availableDate = LocalDate.of(2023,12,10);
 
     @BeforeEach
     public void setup() {
         reservationRepository.deleteAll();
         testCar = carRepository.save(new Car(CarBrand.FORD,"Fiesta",1000.0,20.0));
         testMember = memberRepository.save(new Member("tuserna","ee@mail.test","passw0rd","firstna","lastna","sstreet","ccity",2223,false,0));
-        reservation = reservationRepository.save(new Reservation(testCar, testMember, LocalDateTime.of(2000,12,31,0,0)));
+        reservation.add(reservationRepository.save(new Reservation(testCar, testMember, LocalDate.of(2023,12,1))));
+        reservation.add(reservationRepository.save(new Reservation(testCar, testMember, LocalDate.of(2023,11,1))));
+        reservation.add(reservationRepository.save(new Reservation(testCar, testMember, LocalDate.of(2023,10,1))));
     }
 
     @Test
     public void testReservationById() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/reservation/" + reservation.getId())
+                        .get("/api/reservations/" + reservation.get(0).getId())
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(reservation.getId()));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(reservation.get(0).getId()));
     }
 
     @Test
     public void testAllReservations() throws Exception {
-        String model = "$[?(@.model == '%s')]";
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/cars")
+                        .get("/api/reservations")
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0]").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(1))
-                .andExpect(MockMvcResultMatchers.jsonPath(model, "Fiesta").exists());
+                .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(3));
     }
 
     @Test
-    public void testMakeReservation() throws Exception {
-        ReservationRequest resReq = new ReservationRequest(LocalDateTime.of(2022,10,10,10,1),testCar.getId(),testMember.getUsername());
+    public void testMakeReservationAvailableCar() throws Exception {
+        ReservationRequest resReq = new ReservationRequest(availableDate, testCar, testMember);
         mockMvc.perform(MockMvcRequestBuilders.post("/api/reservations")
                         .contentType("application/json")
                         .accept("application/json")
@@ -91,15 +86,37 @@ class ReservationControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
         //Verify that it actually ended in the database
-        assertEquals(2, reservationRepository.count());
-    }
-
-    // @Test
-    public void editCar() throws Exception {
+        assertEquals(reservation.size()+1, reservationRepository.count());
     }
 
     @Test
-    void deleteCar() throws Exception {
+    public void testMakeReservationUnavailableCar() throws Exception {
+        ReservationRequest resReq = new ReservationRequest(reservation.get(0).getRentalDate(), testCar, testMember);
+        Exception thrown = assertThrows(
+                Exception.class,
+                () -> mockMvc.perform(MockMvcRequestBuilders.post("/api/reservations")
+                        .contentType("application/json")
+                        .accept("application/json")
+                        .content(objectMapper.writeValueAsString(resReq))),
+                "Expected mockMvc to throw Exception, but it didn't"
+        );
+        //Verify that it didn't end in the database
+        assertEquals(reservation.size(), reservationRepository.count());
+    }
+
+    @Test
+    public void editReservation() throws Exception {
+    }
+
+    @Test
+    void deleteReservation() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders
+                        .delete("/api/reservations/"+reservation.get(0).getId())
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        assertEquals(reservation.size()-1, reservationRepository.count());
     }
 }
 

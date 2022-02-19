@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
 public class ReservationResponse {
     int id;
     LocalDateTime reservationDate;
-    LocalDateTime rentalDate;
+    LocalDate rentalDate;
     Car car;
     Member member;
     LocalDateTime created;

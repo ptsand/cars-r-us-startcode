@@ -42,10 +42,12 @@ public class MemberService {
         return new MemberResponse(memberRepository.save(m),true);
     }
     public void deleteMember(String id) {
-        memberRepository.deleteById(id);
+        Member member = memberRepository.findById(id).orElseThrow(()->new Client4xxException("Not found"));
+        memberRepository.delete(member);
     }
-    public MemberResponse getMember(String username, boolean all) {
-        Member member = memberRepository.findById(username).orElseThrow(()->new Client4xxException("Not found"));
+
+    public MemberResponse getMember(String id, boolean all) {
+        Member member = memberRepository.findById(id).orElseThrow(()->new Client4xxException("Not found"));
         return new MemberResponse(member,false);
     }
 }

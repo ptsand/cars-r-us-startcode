@@ -3,6 +3,7 @@ package kea.sem3.jwtdemo.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import kea.sem3.jwtdemo.dto.CarRequest;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -14,6 +15,7 @@ import java.util.Set;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity
 public class Car {
 
@@ -28,7 +30,7 @@ public class Car {
 
     @JsonIgnore
     @OneToMany(mappedBy = "car")
-    Set<Reservation> reservations = new HashSet<>();
+    private Set<Reservation> reservations = new HashSet<>();
 
     @CreationTimestamp
     LocalDateTime created;
@@ -42,16 +44,13 @@ public class Car {
         this.pricePrDay = pricePrDay;
         this.bestDiscount = bestDiscount;
     }
-
     public Car(CarRequest body) {
         this.brand = body.getBrand();
         this.model = body.getModel();
         this.pricePrDay = body.getPricePrDay();
         this.bestDiscount = body.getBestDiscount();
     }
-
-
-    public Car() {
-
+    public void addReservation(Reservation res){
+        reservations.add(res);
     }
 }

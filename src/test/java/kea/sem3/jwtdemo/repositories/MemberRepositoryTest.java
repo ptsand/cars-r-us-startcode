@@ -15,9 +15,11 @@ class MemberRepositoryTest {
     MemberRepository memberRepository;
 
     @BeforeAll
-    static void setUp(@Autowired MemberRepository memberRepository) {
+    static void setUp(@Autowired MemberRepository memberRepository, @Autowired ReservationRepository reservationRepository) {
+        reservationRepository.deleteAll();
+        memberRepository.deleteAll();
         memberRepository.save(new Member("usern","e@mail.test","password","firstn","lastn","street","city",2222,false,0));
-        memberRepository.save(new Member("userna","ee@mail.test","passw0rd","firstna","lastna","sstreet","ccity",2223,false,0));
+        memberRepository.save(new Member("usernam","eee@mail.test","passw0rd","firstna","lastna","sstreet","ccity",2223,false,0));
     }
 
     @Test

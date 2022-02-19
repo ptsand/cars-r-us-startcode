@@ -10,7 +10,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Controller
 @Profile("!test")
@@ -59,7 +59,7 @@ public class MakeTestData implements ApplicationRunner {
         //carRepository.save(new Car(CarBrand.SUZUKI,"Alto",1000.0,5.0));
         Member testMember = memberRepository.save(new Member("tusern1","e@mail.test","password","firstn","lastn","street","city",2222,false,0));
         // memberRepository.save(new Member("tuserna","ee@mail.test","passw0rd","firstna","lastna","sstreet","ccity",2223,false,0));
-        reservationRepository.save(new Reservation(testCar, testMember, LocalDateTime.of(2000,12,31,0,0)));
+        reservationRepository.save(new Reservation(testCar, testMember, LocalDate.of(2000,12,31)));
     }
 
     @Override

@@ -1,9 +1,6 @@
 package kea.sem3.jwtdemo.entity;
 
 import kea.sem3.jwtdemo.dto.ReservationRequest;
-import kea.sem3.jwtdemo.error.Client4xxException;
-import kea.sem3.jwtdemo.repositories.CarRepository;
-import kea.sem3.jwtdemo.repositories.MemberRepository;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
@@ -29,19 +27,19 @@ public class Reservation {
     Member member;
     @CreationTimestamp
     LocalDateTime reservationDate;
-    LocalDateTime rentalDate;
+    LocalDate rentalDate;
     @UpdateTimestamp
     LocalDateTime edited;
 
-    public Reservation(Car car, Member member, LocalDateTime rentalDate) {
+    public Reservation(Car car, Member member, LocalDate rentalDate) {
         this.car = car;
         this.member = member;
         this.rentalDate = rentalDate;
     }
 
-    public Reservation(ReservationRequest body, CarRepository carRepository, MemberRepository memberRepository) {
+    public Reservation(ReservationRequest body) {
         this.rentalDate = body.getRentalDate();
-        this.car = carRepository.findById(body.getCarId()).orElseThrow(()->new Client4xxException("car not found"));
-        this.member = memberRepository.findById(body.getMemberId()).orElseThrow(()->new Client4xxException("member not found"));
+        this.car = body.getCar();
+        this.member = body.getMember();
     }
 }

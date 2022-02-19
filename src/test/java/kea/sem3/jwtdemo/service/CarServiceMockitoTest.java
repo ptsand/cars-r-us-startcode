@@ -55,7 +55,7 @@ class CarServiceMockitoTest {
         Car carWithId = new Car(CarBrand.VOLVO,"V70",100.0,100.0);
         carWithId.setId(1000);
         Mockito.when(carRepository.save(any(Car.class))).thenReturn(carWithId);
-        CarResponse res = carService.addCar(new CarRequest(carWithId.getBrand(),carWithId.getModel(),carWithId.getPricePrDay(),10),false);
+        CarResponse res = carService.addCar(new CarRequest(carWithId.getBrand(),carWithId.getModel(),carWithId.getPricePrDay(),10.0),false);
         assertEquals(1000,res.getId());
     }
 

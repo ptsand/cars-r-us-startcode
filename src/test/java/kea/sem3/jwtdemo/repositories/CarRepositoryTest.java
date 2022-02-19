@@ -17,7 +17,8 @@ class CarRepositoryTest {
     static int id1;
 
     @BeforeAll
-    static void setUp(@Autowired CarRepository carRepository) {
+    static void setUp(@Autowired CarRepository carRepository, @Autowired ReservationRepository reservationRepository) {
+        reservationRepository.deleteAll();
         carRepository.deleteAll();
         id1 = carRepository.save(new Car(CarBrand.BMW,"i3",500.0,300.0)).getId();
     }
