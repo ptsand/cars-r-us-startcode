@@ -5,6 +5,7 @@ import kea.sem3.jwtdemo.dto.CarRequest;
 import kea.sem3.jwtdemo.entity.Car;
 import kea.sem3.jwtdemo.entity.CarBrand;
 import kea.sem3.jwtdemo.repositories.CarRepository;
+import kea.sem3.jwtdemo.repositories.ReservationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,8 @@ class CarControllerTest {
     private List<Car> testCars = new ArrayList<>();
 
     @BeforeEach
-    public void setup() {
+    public void setup(@Autowired ReservationRepository resRepos) {
+        resRepos.deleteAll();
         carRepository.deleteAll();
         testCars.add(carRepository.save(new Car(CarBrand.FORD, "Focus", 400.0, 10.0)));
         testCars.add(carRepository.save(new Car(CarBrand.SUZUKI, "Vitara", 500.0, 14.0)));

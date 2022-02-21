@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import kea.sem3.jwtdemo.dto.MemberRequest;
 import kea.sem3.jwtdemo.entity.Member;
 import kea.sem3.jwtdemo.repositories.MemberRepository;
+import kea.sem3.jwtdemo.repositories.ReservationRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,8 @@ class MemberControllerTest {
     @Autowired private MemberRepository memberRepository;
 
     @BeforeEach // @BeforeAll creates transactional issues
-    public void setup() {
+    public void setup(@Autowired ReservationRepository resRepos) {
+        resRepos.deleteAll();
         memberRepository.deleteAll();
         tms.add(memberRepository.save(new Member("tusrname","e@mail.test","password","firstn","lastn","street","city",2222,true,0)));
         tms.add(memberRepository.save(new Member("usertest","eee@mail.test","passw0rd","firstna","lastna","sstreet","ccity",2223,true,0)));
