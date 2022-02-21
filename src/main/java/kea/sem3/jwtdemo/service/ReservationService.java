@@ -35,7 +35,8 @@ public class ReservationService {
         if(!memberRepository.existsById(body.getMember().getUsername())) throw new Client4xxException("Member not found");
         Reservation res = reservationRepository.findReservationByCar_IdAndRentalDate(body.getCar().getId(),body.getRentalDate());
         if(res != null) throw new Exception("The car is not available at the chosen date");
-        return new ReservationResponse(reservationRepository.save(new Reservation(body)));
+        Reservation r = reservationRepository.save(new Reservation(body));
+        return new ReservationResponse(r);
     }
     public ReservationResponse editReservation(ReservationRequest body, int id){
         return null;

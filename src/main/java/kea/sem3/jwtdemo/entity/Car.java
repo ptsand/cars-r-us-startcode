@@ -22,21 +22,17 @@ public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
-
     CarBrand brand;
     String model;
     Double pricePrDay;
     Double bestDiscount;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "car")
+    @OneToMany(mappedBy = "car") // the following side
     private Set<Reservation> reservations = new HashSet<>();
 
-    @CreationTimestamp
-    LocalDateTime created;
-
-    @UpdateTimestamp
-    LocalDateTime edited;
+    @CreationTimestamp LocalDateTime created;
+    @UpdateTimestamp LocalDateTime edited;
 
     public Car(CarBrand brand, String model, Double pricePrDay, Double bestDiscount) {
         this.brand = brand;
@@ -51,6 +47,6 @@ public class Car {
         this.bestDiscount = body.getBestDiscount();
     }
     public void addReservation(Reservation res){
-        reservations.add(res);
+        res.getCar().getReservations().add(res);
     }
 }

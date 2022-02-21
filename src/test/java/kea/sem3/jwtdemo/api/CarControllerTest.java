@@ -5,7 +5,7 @@ import kea.sem3.jwtdemo.dto.CarRequest;
 import kea.sem3.jwtdemo.entity.Car;
 import kea.sem3.jwtdemo.entity.CarBrand;
 import kea.sem3.jwtdemo.repositories.CarRepository;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -16,7 +16,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.hamcrest.Matchers.containsString;
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -27,33 +29,30 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class CarControllerTest {
 
     @Autowired
-    CarRepository carRepository;
-
-    @Autowired
     MockMvc mockMvc;
-
     @Autowired
     private ObjectMapper objectMapper;
 
-    static int carFordId, carSuzukiId;
+    static CarRepository carRepository;
+    static List<Car> testCars = new ArrayList<>();
 
-    @BeforeEach
-    public void setup() {
-        carRepository.deleteAll();
-        carFordId = carRepository.save(new Car(CarBrand.FORD, "Focus", 400.0, 10.0)).getId();
-        carSuzukiId = carRepository.save(new Car(CarBrand.SUZUKI, "Vitara", 500.0, 14.0)).getId();
+    @BeforeAll
+    public static void setup(@Autowired CarRepository carRepos) {
+        carRepository = carRepos;
+        testCars.add(carRepos.save(new Car(CarBrand.FORD, "Focus", 400.0, 10.0)));
+        testCars.add(carRepos.save(new Car(CarBrand.SUZUKI, "Vitara", 500.0, 14.0)));
     }
 
     @Test
     public void testCarById() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/api/cars/" + carFordId)
+                        .get("/api/cars/" + testCars.get(0).getId())
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(carFordId))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.model").value("Focus"));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(testCars.get(0).getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.model").value(testCars.get(0).getModel()));
     }
 
     @Test
@@ -65,14 +64,9 @@ class CarControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0]").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(2))
-                //One way of testing this
-                .andExpect(MockMvcResultMatchers.jsonPath(model, "Focus").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath(model, "Vitara").exists())
-                //Another way
-                .andExpect(MockMvcResultMatchers.content().string(containsString("Focus")))
-                .andExpect(MockMvcResultMatchers.content().string(containsString("Vitara")));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(testCars.size()))
+                .andExpect(MockMvcResultMatchers.jsonPath(model, testCars.get(0).getModel()).exists())
+                .andExpect(MockMvcResultMatchers.jsonPath(model, testCars.get(1).getModel()).exists());
     }
 
     @Test
@@ -85,7 +79,7 @@ class CarControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
         //Verify that it actually ended in the database
-        assertEquals(3, carRepository.count());
+        assertEquals(testCars.size()+1, carRepository.count());
     }
 
     // @Test

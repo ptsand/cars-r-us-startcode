@@ -19,10 +19,10 @@ public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
-    @ManyToOne //(fetch = FetchType.LAZY)
+    @ManyToOne
     //@JoinColumn(name = "car_id", referencedColumnName = "id")
     Car car;
-    @ManyToOne //(fetch = FetchType.LAZY)
+    @ManyToOne
     //@JoinColumn(name = "member_id", referencedColumnName = "username")
     Member member;
     @CreationTimestamp
