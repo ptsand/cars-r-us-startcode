@@ -5,7 +5,7 @@ import kea.sem3.jwtdemo.dto.CarRequest;
 import kea.sem3.jwtdemo.entity.Car;
 import kea.sem3.jwtdemo.entity.CarBrand;
 import kea.sem3.jwtdemo.repositories.CarRepository;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -29,18 +29,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class CarControllerTest {
 
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private CarRepository carRepository;
+    private List<Car> testCars = new ArrayList<>();
 
-    static CarRepository carRepository;
-    static List<Car> testCars = new ArrayList<>();
-
-    @BeforeAll
-    public static void setup(@Autowired CarRepository carRepos) {
-        carRepository = carRepos;
-        testCars.add(carRepos.save(new Car(CarBrand.FORD, "Focus", 400.0, 10.0)));
-        testCars.add(carRepos.save(new Car(CarBrand.SUZUKI, "Vitara", 500.0, 14.0)));
+    @BeforeEach
+    public void setup() {
+        carRepository.deleteAll();
+        testCars.add(carRepository.save(new Car(CarBrand.FORD, "Focus", 400.0, 10.0)));
+        testCars.add(carRepository.save(new Car(CarBrand.SUZUKI, "Vitara", 500.0, 14.0)));
     }
 
     @Test
