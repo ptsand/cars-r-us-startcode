@@ -39,7 +39,7 @@ class CarControllerTest {
 
     @BeforeEach
     public void setup(@Autowired ReservationRepository resRepos) {
-        resRepos.deleteAll();
+        resRepos.deleteAll(); // Car has reservation
         carRepository.deleteAll();
         testCars.add(carRepository.save(new Car(CarBrand.FORD, "Focus", 400.0, 10.0)));
         testCars.add(carRepository.save(new Car(CarBrand.SUZUKI, "Vitara", 500.0, 14.0)));
