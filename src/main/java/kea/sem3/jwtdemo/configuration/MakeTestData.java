@@ -55,10 +55,10 @@ public class MakeTestData implements ApplicationRunner {
 
     public void makeReservations() {
         Car testCar = carRepository.save(new Car(CarBrand.FORD,"Fiesta",1000.0,10.0));
-        //carRepository.save(new Car(CarBrand.BMW,"i5",1000.0,50.0));
-        //carRepository.save(new Car(CarBrand.SUZUKI,"Alto",1000.0,5.0));
+        carRepository.save(new Car(CarBrand.BMW,"i5",1000.0,50.0));
+        carRepository.save(new Car(CarBrand.SUZUKI,"Alto",1000.0,5.0));
         Member testMember = memberRepository.save(new Member("tusern1","e@mail.test","password","firstn","lastn","street","city",2222,false,0));
-        // memberRepository.save(new Member("tuserna","ee@mail.test","passw0rd","firstna","lastna","sstreet","ccity",2223,false,0));
+        memberRepository.save(new Member("tuserna","ee@mail.test","passw0rd","firstna","lastna","sstreet","ccity",2223,false,0));
         reservationRepository.save(new Reservation(testCar, testMember, LocalDate.of(2000,12,31)));
     }
 
